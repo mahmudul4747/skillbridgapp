@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skillbridg/features/auth/presentation/pages/register_page.dart';
+import 'package:skillbridg/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:skillbridg/features/onboarding/presentation/pages/career_setup_page.dart';
 
 import '../../features/auth/presentation/pages/login_page.dart';
