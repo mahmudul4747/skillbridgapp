@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skillbridg/features/auth/presentation/pages/register_page.dart';
+import 'package:skillbridg/features/onboarding/presentation/pages/career_setup_page.dart';
 
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
@@ -33,6 +35,29 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const LoginPage();
         },
       ),
+      GoRoute(
+  path: '/register',
+  name: 'register',
+  builder: (context, state) {
+    return const RegisterPage();
+  },
+),
+
+GoRoute(
+  path: '/career-setup',
+  name: 'career-setup',
+  builder: (context, state) {
+    return const CareerSetupPage();
+  },
+),
+
+GoRoute(
+  path: '/dashboard',
+  name: 'dashboard',
+  builder: (context, state) {
+    return const DashboardPage();
+  },
+),
     ],
   );
 });
