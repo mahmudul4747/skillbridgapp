@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skillbridg/features/auth/presentation/providers/auth_provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   bool _obscurePassword = true;
+final emailController =
+    TextEditingController();
 
+final passwordController =
+    TextEditingController();
+
+@override
+void dispose() {
+  emailController.dispose();
+  passwordController.dispose();
+  super.dispose();
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,9 +90,10 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 10),
 
-              const TextField(
+              TextField(
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Enter your email',
                   prefixIcon: Icon(
                     Icons.email_outlined,
@@ -137,17 +151,35 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 16),
 
               ElevatedButton(
-                onPressed: () {},
-                child: const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+  onPressed: () async {
+    try {
+      await ref
+          .read(authProvider.notifier)
+          .login(
+            email: emailController.text.trim(),
+            password:
+                passwordController.text.trim(),
+          );
 
-              const SizedBox(height: 24),
+      if (!mounted) return;
+
+      context.go('/dashboard');
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+        SnackBar(
+          content: Text(
+            'Login failed: $e',
+          ),
+        ),
+      );
+    }
+  },
+  child: const Text('Login'),
+),
+const SizedBox(height: 24),
 
               Row(
                 children: [
