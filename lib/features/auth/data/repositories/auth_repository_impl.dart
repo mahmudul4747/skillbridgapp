@@ -43,4 +43,14 @@ class AuthRepositoryImpl
   Future<UserEntity?> getCurrentUser() async {
     return await remoteDataSource.getCurrentUser();
   }
+  @override
+Future<void> updateCareerInfo({
+  required String careerGoal,
+  required String experienceLevel,
+}) async {
+  await remoteDataSource.updateCareerInfo(
+    careerGoal: careerGoal,
+    experienceLevel: experienceLevel,
+  );
+}
 }

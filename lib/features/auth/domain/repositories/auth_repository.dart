@@ -12,6 +12,11 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<void> updateCareerInfo({
+    required String careerGoal,
+    required String experienceLevel,
+  });
+
   Future<void> logout();
 
   Future<UserEntity?> getCurrentUser();

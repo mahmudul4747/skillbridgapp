@@ -106,4 +106,25 @@ class AuthRemoteDataSource {
 
     return UserModel.fromFirestore(snapshot);
   }
+  Future<void> updateCareerInfo({
+  required String careerGoal,
+  required String experienceLevel,
+}) async {
+  final firebaseUser =
+      _firebaseAuth.currentUser;
+
+  if (firebaseUser == null) {
+    throw Exception(
+      'User is not logged in',
+    );
+  }
+
+  await _firestore
+      .collection('users')
+      .doc(firebaseUser.uid)
+      .update({
+    'careerGoal': careerGoal,
+    'experienceLevel': experienceLevel,
+  });
+}
 }

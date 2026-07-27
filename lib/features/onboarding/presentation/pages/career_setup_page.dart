@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_theme.dart';
-
-class CareerSetupPage extends StatefulWidget {
+class CareerSetupPage
+    extends ConsumerStatefulWidget {
   const CareerSetupPage({super.key});
 
   @override
-  State<CareerSetupPage> createState() =>
+  ConsumerState<CareerSetupPage> createState() =>
       _CareerSetupPageState();
 }
 
 class _CareerSetupPageState
-    extends State<CareerSetupPage> {
+    extends ConsumerState<CareerSetupPage> {
   String? selectedCareer;
   String? selectedLevel;
 

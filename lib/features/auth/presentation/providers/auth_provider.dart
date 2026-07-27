@@ -74,4 +74,22 @@ class AuthNotifier
     await _repository.logout();
     state = const AsyncData(null);
   }
+  Future<void> updateCareerInfo({
+  required String careerGoal,
+  required String experienceLevel,
+}) async {
+  state = const AsyncLoading();
+
+  state = await AsyncValue.guard(
+    () async {
+      await _repository.updateCareerInfo(
+        careerGoal: careerGoal,
+        experienceLevel: experienceLevel,
+      );
+
+      return await _repository
+          .getCurrentUser();
+    },
+  );
+}
 }
