@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skillbridg/features/auth/presentation/providers/auth_provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
-
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  ConsumerState<RegisterPage> createState() =>
+      _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState
+    extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
 
   bool _obscurePassword = true;
@@ -38,12 +41,37 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void _register() {
-    if (_formKey.currentState!.validate()) {
-      // Firebase Registration will be added later.
-      context.go('/career-setup');
-    }
+  Future<void> _register() async {
+  if (!_formKey.currentState!.validate()) {
+    return;
   }
+
+  try {
+    await ref
+        .read(authProvider.notifier)
+        .register(
+          name: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          password:
+              _passwordController.text.trim(),
+        );
+
+    if (!mounted) return;
+
+    context.go('/career-setup');
+  } catch (e) {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+      SnackBar(
+        content: Text(
+          'Registration failed: $e',
+        ),
+      ),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
