@@ -1,4 +1,4 @@
-/*class JobEntity {
+class JobEntity {
   final String id;
   final String title;
   final String company;
@@ -32,4 +32,4 @@
     required this.createdAt,
     required this.isRemote,
   });
-}*/
+}
