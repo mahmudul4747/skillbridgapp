@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../dashboard/presentation/pages/dashboard_page.dart';
+import 'ai_page.dart';
+import 'jobs_page.dart';
+import 'profile_page.dart';
+import 'skills_page.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
@@ -17,10 +21,10 @@ class _MainNavigationPageState
 
   final List<Widget> _pages = const [
     DashboardPage(),
-    _JobsPage(),
-    _SkillsPage(),
-    _AiPage(),
-    _ProfilePage(),
+    JobsPage(),
+    SkillsPage(),
+    AiPage(),
+    ProfilePage(),
   ];
 
   @override
@@ -31,7 +35,8 @@ class _MainNavigationPageState
         children: _pages,
       ),
 
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar:
+          NavigationBar(
         selectedIndex: _currentIndex,
 
         onDestinationSelected: (index) {
@@ -98,89 +103,6 @@ class _MainNavigationPageState
             label: 'Profile',
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _JobsPage extends StatelessWidget {
-  const _JobsPage();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Jobs',
-        style: TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}
-
-class _SkillsPage extends StatelessWidget {
-  const _SkillsPage();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Skills',
-        style: TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}
-
-
-class _AiPage extends StatelessWidget {
-  const _AiPage();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'AI Career Assistant',
-        ),
-      ),
-      body: const Center(
-        child: Text(
-          'AI Career Assistant',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ProfilePage extends StatelessWidget {
-  const _ProfilePage();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'My Profile',
-        ),
-      ),
-      body: const Center(
-        child: Text(
-          'Profile',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
       ),
     );
   }
