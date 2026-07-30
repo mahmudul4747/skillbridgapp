@@ -17,19 +17,19 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   final List<OnboardingData> _pages = [
     const OnboardingData(
-      image: 'assets/images/slider11.png',
+      image: 'assets/images/slider11.jpeg',
     ),
     const OnboardingData(
-      image: 'assets/images/slider12.png',
+      image: 'assets/images/slider12.jpeg',
     ),
     const OnboardingData(
-      image: 'assets/images/slider13.png',
+      image: 'assets/images/slider13.jpeg',
     ),
     const OnboardingData(
-      image: 'assets/images/slider14.png',
+      image: 'assets/images/slider14.jpeg',
     ),
     const OnboardingData(
-      image: 'assets/images/slider15.png',
+      image: 'assets/images/slider15.jpeg ',
     ),
 
   ];
