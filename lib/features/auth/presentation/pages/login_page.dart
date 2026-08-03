@@ -13,173 +13,189 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
-final emailController =
-    TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
-final passwordController =
-    TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
-@override
-void dispose() {
-  emailController.dispose();
-  passwordController.dispose();
-  super.dispose();
-}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 30),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 30),
 
-              // Logo
-              Container(
-                height: 64,
-                width: 64,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      AppTheme.primaryBlue,
-                      AppTheme.secondaryPurple,
-                    ],
+                // Logo
+                Container(
+                  height: 64,
+                  width: 64,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        AppTheme.primaryBlue,
+                        AppTheme.secondaryPurple,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Icon(
-                  Icons.rocket_launch_rounded,
-                  color: Colors.white,
-                  size: 32,
-                ),
-              ),
-
-              const SizedBox(height: 35),
-
-              const Text(
-                'Welcome Back 👋',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.darkText,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              const Text(
-                'Login to continue your career journey.',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppTheme.grayText,
-                ),
-              ),
-
-              const SizedBox(height: 40),
-
-              const Text(
-                'Email Address',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.darkText,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              TextField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  hintText: 'Enter your email',
-                  prefixIcon: Icon(
-                    Icons.email_outlined,
+                  child: const Icon(
+                    Icons.rocket_launch_rounded,
+                    color: Colors.white,
+                    size: 32,
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 22),
+                const SizedBox(height: 35),
 
-              const Text(
-                'Password',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.darkText,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              TextField(
-                controller: passwordController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  hintText: 'Enter your password',
-                  prefixIcon: const Icon(
-                    Icons.lock_outline_rounded,
+                const Text(
+                  'Welcome Back 👋',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.darkText,
                   ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword =
-                            !_obscurePassword;
-                      });
-                    },
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
+                ),
+
+                const SizedBox(height: 10),
+
+                const Text(
+                  'Login to continue your career journey.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: AppTheme.grayText,
+                  ),
+                ),
+
+                const SizedBox(height: 40),
+
+                const Text(
+                  'Email Address',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.darkText,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                TextFormField(
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    hintText: 'Enter your email',
+                    prefixIcon: Icon(
+                      Icons.email_outlined,
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!value.contains('@')) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 22),
+
+                const Text(
+                  'Password',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.darkText,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                TextFormField(
+                  controller: passwordController,
+                  obscureText: _obscurePassword,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    hintText: 'Enter your password',
+                    prefixIcon: const Icon(
+                      Icons.lock_outline_rounded,
+                    ),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                      ),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 12),
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Forgot Password?',
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 12),
+                const SizedBox(height: 16),
 
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Forgot Password?',
-                  ),
-                ),
-              ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (!_formKey.currentState!.validate()) return;
 
-              const SizedBox(height: 16),
+                    final messenger = ScaffoldMessenger.of(context);
+                    final router = GoRouter.of(context);
+                    try {
+                      await ref.read(authProvider.notifier).login(
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim(),
+                          );
 
-              ElevatedButton(
-                onPressed: () async {
-                  final messenger = ScaffoldMessenger.of(context);
-                  final router = GoRouter.of(context);
-                  try {
-                    await ref
-                        .read(authProvider.notifier)
-                        .login(
-                          email: emailController.text.trim(),
-                          password:
-                              passwordController.text.trim(),
-                        );
-
-                    if (!mounted) return;
-                    router.go('/dashboard');
-                  } catch (e) {
-                    if (!mounted) return;
-                    messenger.showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Login failed: ${e.toString().replaceAll(RegExp(r'^Exception:\s*'), '')}',
+                      if (!mounted) return;
+                      router.go('/dashboard');
+                    } catch (e) {
+                      if (!mounted) return;
+                      messenger.showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Login failed: ${e.toString().replaceAll(RegExp(r'^Exception:\s*'), '')}',
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                },
-                child: const Text('Login'),
-              ),
-const SizedBox(height: 24),
+                      );
+                    }
+                  },
+                  child: const Text('Login'),
+                ),
+                const SizedBox(height: 24),
 
               Row(
                 children: [
@@ -256,6 +272,7 @@ const SizedBox(height: 24),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
