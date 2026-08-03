@@ -15,6 +15,8 @@ class AuthRemoteDataSource {
         _firestore =
             firestore ?? FirebaseFirestore.instance;
 
+  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+
   Future<UserModel> register({
     required String name,
     required String email,

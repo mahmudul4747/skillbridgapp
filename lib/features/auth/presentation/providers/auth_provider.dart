@@ -5,9 +5,15 @@ import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 
+import 'package:firebase_auth/firebase_auth.dart' show User;
+
 final authRemoteDataSourceProvider =
     Provider<AuthRemoteDataSource>((ref) {
   return AuthRemoteDataSource();
+});
+
+final authStateChangesProvider = StreamProvider<User?>((ref) {
+  return ref.watch(authRemoteDataSourceProvider).authStateChanges;
 });
 
 final authRepositoryProvider =

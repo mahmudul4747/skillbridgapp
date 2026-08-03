@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _TestApp extends StatefulWidget {
-  const _TestApp({super.key});
+  const _TestApp();
 
   @override
   State<_TestApp> createState() => _TestAppState();

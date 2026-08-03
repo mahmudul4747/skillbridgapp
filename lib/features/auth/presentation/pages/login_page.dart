@@ -114,6 +114,7 @@ void dispose() {
               const SizedBox(height: 10),
 
               TextField(
+                controller: passwordController,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   hintText: 'Enter your password',
@@ -151,34 +152,33 @@ void dispose() {
               const SizedBox(height: 16),
 
               ElevatedButton(
-  onPressed: () async {
-    try {
-      await ref
-          .read(authProvider.notifier)
-          .login(
-            email: emailController.text.trim(),
-            password:
-                passwordController.text.trim(),
-          );
+                onPressed: () async {
+                  final messenger = ScaffoldMessenger.of(context);
+                  final router = GoRouter.of(context);
+                  try {
+                    await ref
+                        .read(authProvider.notifier)
+                        .login(
+                          email: emailController.text.trim(),
+                          password:
+                              passwordController.text.trim(),
+                        );
 
-      if (!mounted) return;
-
-      context.go('/dashboard');
-    } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context)
-          .showSnackBar(
-        SnackBar(
-          content: Text(
-            'Login failed: $e',
-          ),
-        ),
-      );
-    }
-  },
-  child: const Text('Login'),
-),
+                    if (!mounted) return;
+                    router.go('/dashboard');
+                  } catch (e) {
+                    if (!mounted) return;
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Login failed: ${e.toString().replaceAll(RegExp(r'^Exception:\s*'), '')}',
+                        ),
+                      ),
+                    );
+                  }
+                },
+                child: const Text('Login'),
+              ),
 const SizedBox(height: 24),
 
               Row(

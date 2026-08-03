@@ -48,16 +48,14 @@ class JobCard extends StatelessWidget {
         ),
 
         onTap: () {
-          onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (_) => JobDetailsPage(
-        job: job,
-      ),
-    ),
-  );
-};
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => JobDetailsPage(
+                job: job,
+              ),
+            ),
+          );
         },
       ),
     );
