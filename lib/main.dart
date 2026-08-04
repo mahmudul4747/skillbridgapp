@@ -6,6 +6,8 @@ import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'firebase_options.dart';
 
+import 'shared/providers/theme_provider.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -29,11 +31,17 @@ class SkillBridgeApp extends ConsumerWidget {
     WidgetRef ref,
   ) {
     final router = ref.watch(appRouterProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'SkillBridge',
       theme: AppTheme.lightTheme,
+      darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
+        primaryColor: AppTheme.primaryBlue,
+        scaffoldBackgroundColor: const Color(0xFF121212),
+      ),
+      themeMode: themeMode,
       routerConfig: router,
     );
   }

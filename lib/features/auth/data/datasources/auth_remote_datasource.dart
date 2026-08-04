@@ -108,25 +108,45 @@ class AuthRemoteDataSource {
 
     return UserModel.fromFirestore(snapshot);
   }
-  Future<void> updateCareerInfo({
-  required String careerGoal,
-  required String experienceLevel,
-}) async {
-  final firebaseUser =
-      _firebaseAuth.currentUser;
-
-  if (firebaseUser == null) {
-    throw Exception(
-      'User is not logged in',
-    );
+  Future<void> sendPasswordResetEmail(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email.trim());
   }
 
-  await _firestore
-      .collection('users')
-      .doc(firebaseUser.uid)
-      .update({
-    'careerGoal': careerGoal,
-    'experienceLevel': experienceLevel,
-  });
-}
+  Future<void> sendEmailVerification() async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+  }
+
+  Future<void> updateProfile({
+    String? name,
+    String? photoUrl,
+    String? careerGoal,
+    String? experienceLevel,
+  }) async {
+    final firebaseUser = _firebaseAuth.currentUser;
+    if (firebaseUser == null) {
+      throw Exception('User is not logged in');
+    }
+
+    final Map<String, dynamic> updates = {};
+    if (name != null && name.isNotEmpty) {
+      updates['name'] = name;
+      await firebaseUser.updateDisplayName(name);
+    }
+    if (photoUrl != null) {
+      updates['photoUrl'] = photoUrl;
+      await firebaseUser.updatePhotoURL(photoUrl);
+    }
+    if (careerGoal != null) updates['careerGoal'] = careerGoal;
+    if (experienceLevel != null) updates['experienceLevel'] = experienceLevel;
+
+    if (updates.isNotEmpty) {
+      await _firestore
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .update(updates);
+    }
+  }
 }

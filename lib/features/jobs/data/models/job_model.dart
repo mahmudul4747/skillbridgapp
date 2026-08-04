@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/job_entity.dart';
 
 class JobModel extends JobEntity {
@@ -33,9 +34,33 @@ class JobModel extends JobEntity {
       description: map['description'] ?? '',
       requirements: List<String>.from(map['requirements'] ?? []),
       skills: List<String>.from(map['skills'] ?? []),
-      deadline: map['deadline'].toDate(),
-      createdAt: map['createdAt'].toDate(),
+      deadline: map['deadline'] is Timestamp
+          ? (map['deadline'] as Timestamp).toDate()
+          : (DateTime.tryParse(map['deadline']?.toString() ?? '') ?? DateTime.now()),
+      createdAt: map['createdAt'] is Timestamp
+          ? (map['createdAt'] as Timestamp).toDate()
+          : (DateTime.tryParse(map['createdAt']?.toString() ?? '') ?? DateTime.now()),
       isRemote: map['isRemote'] ?? false,
+    );
+  }
+
+  factory JobModel.fromEntity(JobEntity entity) {
+    return JobModel(
+      id: entity.id,
+      title: entity.title,
+      company: entity.company,
+      companyLogo: entity.companyLogo,
+      location: entity.location,
+      jobType: entity.jobType,
+      category: entity.category,
+      salary: entity.salary,
+      experience: entity.experience,
+      description: entity.description,
+      requirements: entity.requirements,
+      skills: entity.skills,
+      deadline: entity.deadline,
+      createdAt: entity.createdAt,
+      isRemote: entity.isRemote,
     );
   }
 

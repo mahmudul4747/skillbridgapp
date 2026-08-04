@@ -2,172 +2,81 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../jobs/presentation/providers/job_provider.dart';
+import '../../../jobs/presentation/widgets/job_card.dart';
 
 class JobsPage extends ConsumerWidget {
   const JobsPage({super.key});
 
+  static const categories = ['All', 'Technology', 'Design', 'Marketing', 'Finance'];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final filteredJobsAsync = ref.watch(filteredJobsProvider);
+    final selectedCategory = ref.watch(selectedCategoryProvider);
+
     return Scaffold(
-      backgroundColor: const Color(0xffF7F8FC),
-
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          'Find Your Dream Job',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AppTheme.darkText,
-          ),
-        ),
+        title: const Text('Find Your Dream Job'),
       ),
-
-      body: ListView(
-        padding: const EdgeInsets.all(20),
+      body: Column(
         children: [
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Search jobs...',
-              prefixIcon: const Icon(
-                Icons.search_rounded,
-              ),
-              suffixIcon: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.tune_rounded,
-                ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: TextField(
+              onChanged: (value) {
+                ref.read(searchQueryProvider.notifier).setQuery(value);
+              },
+              decoration: const InputDecoration(
+                hintText: 'Search jobs, companies, or locations...',
+                prefixIcon: Icon(Icons.search_rounded),
               ),
             ),
           ),
-
-          const SizedBox(height: 24),
-
-          const Text(
-            'Recommended Jobs',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: AppTheme.darkText,
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: Row(
+              children: categories.map((cat) {
+                final isSelected = selectedCategory == cat;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: FilterChip(
+                    label: Text(cat),
+                    selected: isSelected,
+                    selectedColor: AppTheme.primaryBlue.withValues(alpha: 0.2),
+                    checkmarkColor: AppTheme.primaryBlue,
+                    onSelected: (selected) {
+                      ref.read(selectedCategoryProvider.notifier).setCategory(cat);
+                    },
+                  ),
+                );
+              }).toList(),
             ),
           ),
-
-          const SizedBox(height: 16),
-
-          _JobCard(
-            title: 'Flutter Developer',
-            company: 'Tech Company',
-            location: 'Remote',
-          ),
-
-          _JobCard(
-            title: 'Junior Android Developer',
-            company: 'Software Company',
-            location: 'Dhaka',
-          ),
-
-          _JobCard(
-            title: 'Frontend Developer',
-            company: 'Startup',
-            location: 'Remote',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _JobCard extends StatelessWidget {
-  final String title;
-  final String company;
-  final String location;
-
-  const _JobCard({
-    required this.title,
-    required this.company,
-    required this.location,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(
-        bottom: 14,
-      ),
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black
-                .withValues(alpha: 0.04),
-            blurRadius: 15,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 52,
-            width: 52,
-            decoration: BoxDecoration(
-              color: AppTheme.primaryBlue
-                  .withValues(alpha: 0.1),
-              borderRadius:
-                  BorderRadius.circular(15),
-            ),
-            child: const Icon(
-              Icons.business_center_rounded,
-              color:
-                  AppTheme.primaryBlue,
-            ),
-          ),
-
-          const SizedBox(width: 14),
-
           Expanded(
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight:
-                        FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
+            child: filteredJobsAsync.when(
+              data: (jobs) {
+                if (jobs.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No jobs found matching your criteria.',
+                      style: TextStyle(color: AppTheme.grayText),
+                    ),
+                  );
+                }
 
-                const SizedBox(height: 5),
-
-                Text(
-                  company,
-                  style: const TextStyle(
-                    color:
-                        AppTheme.grayText,
-                  ),
-                ),
-
-                const SizedBox(height: 5),
-
-                Text(
-                  location,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color:
-                        AppTheme.primaryBlue,
-                  ),
-                ),
-              ],
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: jobs.length,
+                  itemBuilder: (context, index) {
+                    return JobCard(job: jobs[index]);
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) => Center(child: Text('Error loading jobs: $err')),
             ),
-          ),
-
-          const Icon(
-            Icons.arrow_forward_ios_rounded,
-            size: 16,
           ),
         ],
       ),

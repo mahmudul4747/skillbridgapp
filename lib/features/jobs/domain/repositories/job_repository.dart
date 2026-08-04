@@ -8,4 +8,12 @@ abstract class JobRepository {
   Future<void> saveJob(String jobId);
 
   Future<void> applyJob(String jobId);
+
+  Future<void> createJob(JobEntity job);
+
+  Future<void> updateJob(JobEntity job);
+
+  Future<void> deleteJob(String id);
+
+  Future<void> toggleSaveJob(String userId, String jobId);
 }

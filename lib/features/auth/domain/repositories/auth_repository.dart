@@ -12,9 +12,15 @@ abstract class AuthRepository {
     required String password,
   });
 
-  Future<void> updateCareerInfo({
-    required String careerGoal,
-    required String experienceLevel,
+  Future<void> sendPasswordResetEmail(String email);
+
+  Future<void> sendEmailVerification();
+
+  Future<void> updateProfile({
+    String? name,
+    String? photoUrl,
+    String? careerGoal,
+    String? experienceLevel,
   });
 
   Future<void> logout();

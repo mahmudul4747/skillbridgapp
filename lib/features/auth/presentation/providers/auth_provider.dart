@@ -80,22 +80,29 @@ class AuthNotifier
     await _repository.logout();
     state = const AsyncData(null);
   }
-  Future<void> updateCareerInfo({
-  required String careerGoal,
-  required String experienceLevel,
-}) async {
-  state = const AsyncLoading();
+  Future<void> sendPasswordResetEmail(String email) async {
+    await _repository.sendPasswordResetEmail(email);
+  }
 
-  state = await AsyncValue.guard(
-    () async {
-      await _repository.updateCareerInfo(
+  Future<void> sendEmailVerification() async {
+    await _repository.sendEmailVerification();
+  }
+
+  Future<void> updateProfile({
+    String? name,
+    String? photoUrl,
+    String? careerGoal,
+    String? experienceLevel,
+  }) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await _repository.updateProfile(
+        name: name,
+        photoUrl: photoUrl,
         careerGoal: careerGoal,
         experienceLevel: experienceLevel,
       );
-
-      return await _repository
-          .getCurrentUser();
-    },
-  );
-}
+      return await _repository.getCurrentUser();
+    });
+  }
 }

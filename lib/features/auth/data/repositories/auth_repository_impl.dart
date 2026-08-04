@@ -44,13 +44,27 @@ class AuthRepositoryImpl
     return await remoteDataSource.getCurrentUser();
   }
   @override
-Future<void> updateCareerInfo({
-  required String careerGoal,
-  required String experienceLevel,
-}) async {
-  await remoteDataSource.updateCareerInfo(
-    careerGoal: careerGoal,
-    experienceLevel: experienceLevel,
-  );
-}
+  Future<void> sendPasswordResetEmail(String email) async {
+    await remoteDataSource.sendPasswordResetEmail(email);
+  }
+
+  @override
+  Future<void> sendEmailVerification() async {
+    await remoteDataSource.sendEmailVerification();
+  }
+
+  @override
+  Future<void> updateProfile({
+    String? name,
+    String? photoUrl,
+    String? careerGoal,
+    String? experienceLevel,
+  }) async {
+    await remoteDataSource.updateProfile(
+      name: name,
+      photoUrl: photoUrl,
+      careerGoal: careerGoal,
+      experienceLevel: experienceLevel,
+    );
+  }
 }

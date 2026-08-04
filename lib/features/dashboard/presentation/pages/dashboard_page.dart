@@ -1,61 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    
-      return SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                children: [
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Good Morning 👋',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: AppTheme.grayText,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          'Emran',
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight:
-                                FontWeight.bold,
-                            color:
-                                AppTheme.darkText,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authProvider).value;
 
-                  Container(
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Welcome Back 👋',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: AppTheme.grayText,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        user?.name.isNotEmpty == true ? user!.name : 'User',
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.darkText,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => context.push('/notifications'),
+                  child: Container(
                     height: 48,
                     width: 48,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius:
-                          BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black
-                              .withValues(alpha: 0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 15,
                         ),
                       ],
@@ -64,8 +63,9 @@ class DashboardPage extends StatelessWidget {
                       Icons.notifications_none_rounded,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
 
               const SizedBox(height: 25),
 
@@ -185,28 +185,28 @@ class DashboardPage extends StatelessWidget {
                 childAspectRatio: 1.4,
                 children: [
                   _QuickActionCard(
-                    icon: Icons.description_outlined,
-                    title: 'Build CV',
+                    icon: Icons.bookmark_border_rounded,
+                    title: 'Saved Jobs',
                     color: Colors.blue,
-                    onTap: () {},
+                    onTap: () => context.push('/saved-jobs'),
                   ),
                   _QuickActionCard(
-                    icon: Icons.auto_awesome_outlined,
-                    title: 'AI CV Analyzer',
+                    icon: Icons.assignment_outlined,
+                    title: 'Applications',
                     color: Colors.purple,
-                    onTap: () {},
+                    onTap: () => context.push('/applications-history'),
                   ),
                   _QuickActionCard(
-                    icon: Icons.psychology_outlined,
-                    title: 'Skill Gap',
+                    icon: Icons.person_outline_rounded,
+                    title: 'Edit Profile',
                     color: Colors.orange,
-                    onTap: () {},
+                    onTap: () => context.push('/edit-profile'),
                   ),
                   _QuickActionCard(
-                    icon: Icons.smart_toy_outlined,
-                    title: 'AI Interview',
+                    icon: Icons.settings_outlined,
+                    title: 'Settings',
                     color: Colors.green,
-                    onTap: () {},
+                    onTap: () => context.push('/settings'),
                   ),
                 ],
               ),

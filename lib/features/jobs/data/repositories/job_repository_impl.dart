@@ -37,4 +37,24 @@ class JobRepositoryImpl implements JobRepository {
 
   @override
   Future<void> applyJob(String jobId) async {}
+
+  @override
+  Future<void> createJob(JobEntity job) async {
+    await remote.createJob(JobModel.fromEntity(job));
+  }
+
+  @override
+  Future<void> updateJob(JobEntity job) async {
+    await remote.updateJob(JobModel.fromEntity(job));
+  }
+
+  @override
+  Future<void> deleteJob(String id) async {
+    await remote.deleteJob(id);
+  }
+
+  @override
+  Future<void> toggleSaveJob(String userId, String jobId) async {
+    await remote.toggleSaveJob(userId, jobId);
+  }
 }
